@@ -1,7 +1,7 @@
 $(function() {
   var count = 0;
   var employees = [];
-  var $p = $('<p>');
+  var $p = $('p');
   function Employee(first, last, number, title, review, salary) {
     this.firstName = first;
     this.lastName = last;
@@ -11,13 +11,35 @@ $(function() {
     this.salary = salary;
   }
 
+  //function calculates the total salary of the employees in the array, then changes text of p tag to reflect it
   function updateSalaryTotal() {
     var total = 0;
     employees.forEach(function(elem) {
       total += parseInt(elem.salary);
     });
 
-    $p.text('Total Payroll:\n\$' + total);
+    $p.text('Total Payroll: $' + total);
+    $p.css('border-width', '2px');
+    $p.css('border-style', 'ridge');
+    $p.css('border-color', 'Gainsboro');
+    $p.css('border-radius', '12px');
+  }
+
+  //function to remove employees
+  function removeEmployee() {
+    var parentID = $(this).closest('tr').attr('id');
+    var indexOfEmployee = employees.findIndex(function(elem) {
+        return elem.firstName + elem.lastName == parentID;
+      });
+
+    $('#' + parentID).remove();
+    employees.splice(indexOfEmployee, 1);
+    updateSalaryTotal();
+    if (employees.length == 0) {        //if all the employees have been removed, hide the table and total element
+      $('table').addClass('hidden');
+      $p.text('');
+      $p.css('border', 'none');
+    }
   }
 
   //Takes in employee object, adds it to html table along with button and employee rating style
@@ -29,8 +51,14 @@ $(function() {
     $buttontd.append($button);
     for (var prop in emp) {
       var $td = $('<td>');      //cycles through employee properties, adding the property value to the table text
-      $td.text(emp[prop]);
+      if (prop == 'salary') {
+        $td.text('$' + emp[prop]);
+      }else {
+        $td.text(emp[prop]);
+      }
+
       if (prop == 'reviewRating') {     //when it comes across reviewRating, add background color based on rating value
+        $td.css('color', 'black');
         switch (parseInt(emp[prop])) {
           case 1:
             $td.css('background-color', 'red');
@@ -56,10 +84,6 @@ $(function() {
 
     $tr.attr('id', emp.firstName + emp.lastName);     //add id to table row for sorting and other functionality
     $tr.append($buttontd);     //add remove button as last child of table row
-
-    if (employees.length == 0) {
-      $('header').append($p);
-    }
 
     //conditional statement to alphabetically (by first name) sort the table as employees are created
     if (employees.length == 0 || emp.firstName.toUpperCase() >= employees[employees.length - 1].firstName.toUpperCase()) {
@@ -93,30 +117,16 @@ $(function() {
     } finally {
       event.preventDefault();
     }
+
+    $('form')[0].reset();
   });
 
   //event handler for removal of employees
-  $('table').on('click', 'button', function() {
-
-    var parentID = $(this).closest('tr').attr('id');
-    count++;
-    var indexOfEmployee = employees.findIndex(function(elem) {
-        return elem.firstName + elem.lastName == parentID;
-      });
-
-    $('#' + parentID).remove();
-    employees.splice(indexOfEmployee, 1);
-    updateSalaryTotal();
-    if (employees.length == 0) {
-      $('table').addClass('hidden');
-      $('header > p').remove();
-    }
-
-  });
+  $('table').on('click', 'button', removeEmployee);
 
   //event handler for random employee generator, uses chance.js library for randomization
   $('aside').on('click', 'button', function(event) {
-    var randEmployee = new Employee(chance.first(), chance.last(), chance.natural(), chance.word(), chance.natural({min:1, max:5}), chance.natural({min:10000, max:999999999}));
+    var randEmployee = new Employee(chance.first(), chance.last(), chance.natural({min: 1000, max: 9999999}), chance.word(), chance.natural({min:1, max:5}), 1000 * chance.natural({min:1, max:999}));
     employeeRender(randEmployee);
   });
 

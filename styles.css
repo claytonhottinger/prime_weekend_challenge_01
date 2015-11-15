@@ -2,14 +2,35 @@
   display:none;
 }
 
+body {
+  background-color: #ffffe5;
+}
+
+input, button{
+  background-color: Gainsboro;
+}
+
+p {
+  background-color: orange;
+  margin: auto;
+  width: 180px;
+}
+
 td, th {
   text-align: center;
+  border: 2px ridge #b30000;
+}
+
+input {
+  width: 150px;
 }
 
 aside {
+  background-color: #b30000;
+  border: 4px ridge Gainsboro;
+  border-radius: 10px;
+  text-align: center;
+  height: 1080px;
+  width: 200px;
   float:left;
-}
-
-header, table {
-  float: right;
 }
