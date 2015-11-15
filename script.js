@@ -1,6 +1,7 @@
 $(function() {
   var count = 0;
   var employees = [];
+  var $p = $('<p>');
   function Employee(first, last, number, title, review, salary) {
     this.firstName = first;
     this.lastName = last;
@@ -8,6 +9,15 @@ $(function() {
     this.title = title;
     this.reviewRating = review;
     this.salary = salary;
+  }
+
+  function updateSalaryTotal() {
+    var total = 0;
+    employees.forEach(function(elem) {
+      total += parseInt(elem.salary);
+    });
+
+    $p.text('Total Payroll:\n\$' + total);
   }
 
   //Takes in employee object, adds it to html table along with button and employee rating style
@@ -46,6 +56,11 @@ $(function() {
 
     $tr.attr('id', emp.firstName + emp.lastName);     //add id to table row for sorting and other functionality
     $tr.append($buttontd);     //add remove button as last child of table row
+
+    if (employees.length == 0) {
+      $('header').append($p);
+    }
+
     //conditional statement to alphabetically (by first name) sort the table as employees are created
     if (employees.length == 0 || emp.firstName.toUpperCase() >= employees[employees.length - 1].firstName.toUpperCase()) {
       employees.push(emp);
@@ -63,6 +78,8 @@ $(function() {
         }
       }
     }
+
+    updateSalaryTotal();
   }
 
   //event handler for form submit, calls employeeRender to add information to table
@@ -89,8 +106,10 @@ $(function() {
 
     $('#' + parentID).remove();
     employees.splice(indexOfEmployee, 1);
+    updateSalaryTotal();
     if (employees.length == 0) {
       $('table').addClass('hidden');
+      $('header > p').remove();
     }
 
   });

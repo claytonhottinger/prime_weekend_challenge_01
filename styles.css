@@ -9,3 +9,7 @@ td, th {
 aside {
   float:left;
 }
+
+header, table {
+  float: right;
+}
