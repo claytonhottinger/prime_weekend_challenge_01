@@ -15,12 +15,12 @@ $(function() {
     var $tr = $('<tr>');
     var $buttontd = $('<td>');
     var $button = $('<button>');
-    $button.text('Remove Employee');
+    $button.text('Remove Employee');  //prepares remove button to be added
     $buttontd.append($button);
     for (var prop in emp) {
-      var $td = $('<td>');
+      var $td = $('<td>');      //cycles through employee properties, adding the property value to the table text
       $td.text(emp[prop]);
-      if (prop == 'reviewRating') {
+      if (prop == 'reviewRating') {     //when it comes across reviewRating, add background color based on rating value
         switch (parseInt(emp[prop])) {
           case 1:
             $td.css('background-color', 'red');
@@ -40,28 +40,26 @@ $(function() {
         }
       }
 
-      $tr.attr('id', emp.firstName + emp.lastName);
-      $tr.append($td);
+      $tr.append($td);      //add table data to the current table row
 
     }
 
-    $tr.append($buttontd);
+    $tr.attr('id', emp.firstName + emp.lastName);     //add id to table row for sorting and other functionality
+    $tr.append($buttontd);     //add remove button as last child of table row
+    //conditional statement to alphabetically (by first name) sort the table as employees are created
     if (employees.length == 0 || emp.firstName.toUpperCase() >= employees[employees.length - 1].firstName.toUpperCase()) {
       employees.push(emp);
-      $('table').append($tr);
-      $('table').removeClass('hidden');
-      console.log(employees);
+      $('table').append($tr);   //add table row to end of table  if the table is empty or
+      $('table').removeClass('hidden'); // the new employee goes after the last employee in the table
     } else if (emp.firstName.toUpperCase() <= employees[0].firstName.toUpperCase()) {
       $('table').find('#' + employees[0].firstName + employees[0].lastName).before($tr);
-      employees.unshift(emp);
-      console.log(employees);
+      employees.unshift(emp);   //add table row to beginning of table if employee goes before first employee in the table
     } else {
       for (var i = 0; i < employees.length - 1; i++) {
         if (emp.firstName.toUpperCase() > employees[i].firstName.toUpperCase() && emp.firstName.toUpperCase() < employees[i + 1].firstName.toUpperCase()) {
           $('table').find('#' + employees[i].firstName + employees[i].lastName).after($tr);
-          employees.splice(i + 1, 0, emp);
-          console.log(employees);
-          break;
+          employees.splice(i + 1, 0, emp);    //goes through employees array until new employee is between
+          break;                              // the employees at the index and the one after, adds table row and array index between them
         }
       }
     }
