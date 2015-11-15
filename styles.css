@@ -1,0 +1,11 @@
+.hidden {
+  display:none;
+}
+
+td, th {
+  text-align: center;
+}
+
+aside {
+  float:left;
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Employee information</title>
+    <link rel="stylesheet" href = "styles.css">
+  </head>
+  <body>
+
+    <section>
+      <header>
+        
+      </header>
+      <aside>
+        <form id="newEmployee">
+          <input type="text" name="firstName" placeholder="First Name" required></input><br>
+          <input type="text" name="lastName" placeholder="Last Name" required></input><br>
+          <input type="number" name="empNumber" placeholder="Employee Number" required></input><br>
+          <input type="text" name="title" placeholder="Title" required></input><br>
+          <input type="number" name="reviewScore" min = 1 max = 5 step = 1 placeholder="Last Review Rating" required></input><br>
+          <input type="number" name="salary" placeholder="Salary" required></input><br>
+          <input type="submit" value="Create New Employee">
+        </form>
+        <button>Generate Random Employee
+        </button>
+
+      </aside>
+      <table class = "hidden">
+        <tr>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Employee Number</th>
+          <th>Title</th>
+          <th>Last Review Rating</th>
+          <th>Salary</th>
+          <th></th>
+        </tr>
+      </table>
+    </section>
+
+
+    <script src="jquery-2.1.4.js"></script>
+    <script src="chance.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
