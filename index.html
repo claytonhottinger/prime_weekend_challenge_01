@@ -26,10 +26,10 @@
         <button>Random Employee</button>
 
       </aside>
-      <table class = "hidden">
+      <table class = "employees">
         <script id="employeetable" type="text/x-handlebars-template">
 
-          {{#each employees}}
+          {{#each list}}
             <tr>
               <td>{{firstName}}</td>
               <td>{{lastName}}</td>
@@ -37,7 +37,7 @@
               <td>{{title}}</td>
               <td>{{reviewRating}}</td>
               <td>{{salary}}</td>
-              <td><button>Remove</button></td>
+              <td><button class = 'remove'>Remove</button></td>
             </tr>
             {{/each}}
         </script>
