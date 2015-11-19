@@ -10,7 +10,10 @@
 
       <aside>
         <header>
-          <p></p>
+          <p>
+            <script id="salary-total" type="text/x-handlebars-template">
+              <p> Total Payroll: ${{salary}}</p>
+            </script>
         </header>
         <form id="newEmployee">
           <input type="text" name="firstName" placeholder="First Name" required></input><br>
@@ -37,7 +40,7 @@
       </table>
     </section>
 
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.4/handlebars.min.js"></script>
     <script src="jquery-2.1.4.js"></script>
     <script src="chance.js"></script>
     <script src="script.js"></script>

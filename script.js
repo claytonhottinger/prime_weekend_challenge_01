@@ -2,6 +2,7 @@ $(function() {
   var count = 0;
   var employees = [];
   var $p = $('p');
+  var total = {salary: 0};
   function Employee(first, last, number, title, review, salary) {
     this.firstName = first;
     this.lastName = last;
@@ -11,18 +12,15 @@ $(function() {
     this.salary = salary;
   }
 
+  $('header').append(updateSalaryTotal());
   //function calculates the total salary of the employees in the array, then changes text of p tag to reflect it
   function updateSalaryTotal() {
-    var total = 0;
     employees.forEach(function(elem) {
-      total += parseInt(elem.salary);
+      total.salary += parseInt(elem.salary);
     });
-
-    $p.text('Total Payroll: $' + total);
-    $p.css('border-width', '2px');
-    $p.css('border-style', 'ridge');
-    $p.css('border-color', 'Gainsboro');
-    $p.css('border-radius', '12px');
+    var theTemplateScript = $('#salary-total').html();
+    var theTemplate = Handlebars.compile(theTemplateScript);
+    return theTemplate(total);
   }
 
   //function to remove employees
@@ -84,7 +82,6 @@ $(function() {
 
     $tr.attr('id', emp.firstName + emp.lastName);     //add id to table row for sorting and other functionality
     $tr.append($buttontd);     //add remove button as last child of table row
-
     //conditional statement to alphabetically (by first name) sort the table as employees are created
     if (employees.length == 0 || emp.firstName.toUpperCase() >= employees[employees.length - 1].firstName.toUpperCase()) {
       employees.push(emp);
@@ -103,7 +100,6 @@ $(function() {
       }
     }
 
-    updateSalaryTotal();
   }
 
   //event handler for form submit, calls employeeRender to add information to table
@@ -112,6 +108,7 @@ $(function() {
       var data = $(this).serializeArray();
       var newEmployee = new Employee(data[0].value, data[1].value, data[2].value, data[3].value, data[4].value, data[5].value);
       employeeRender(newEmployee);
+      updateSalaryTotal();
     } catch (e) {
       console.log(e);
     } finally {
@@ -126,8 +123,10 @@ $(function() {
 
   //event handler for random employee generator, uses chance.js library for randomization
   $('aside').on('click', 'button', function(event) {
-    var randEmployee = new Employee(chance.first(), chance.last(), chance.natural({min: 1000, max: 9999999}), chance.word(), chance.natural({min:1, max:5}), 1000 * chance.natural({min:1, max:999}));
+    var randEmployee = new Employee(chance.first(), chance.last(), chance.natural({min: 1000, max: 9999999}), chance.word(), chance.natural({min: 1, max: 5}), 1000 * chance.natural({min: 1, max: 999}));
     employeeRender(randEmployee);
+    updateSalaryTotal();
+
   });
 
 });
