@@ -2,7 +2,10 @@ $(function() {
   var count = 0;
   var employees = [];
   var $p = $('p');
-  var total = {salary: 0};
+  var salaryTemplateScript = $('#salary-total').html();
+  var salaryTemplate = Handlebars.compile(salaryTemplateScript);
+  var listTemplateScript = $('#employeetable').html();
+  var listTemplate = Handlebars.compile(listTemplateScript);
   function Employee(first, last, number, title, review, salary) {
     this.firstName = first;
     this.lastName = last;
@@ -12,15 +15,13 @@ $(function() {
     this.salary = salary;
   }
 
-  $('header').append(updateSalaryTotal());
   //function calculates the total salary of the employees in the array, then changes text of p tag to reflect it
   function updateSalaryTotal() {
+    var total = {salary: 0};
     employees.forEach(function(elem) {
       total.salary += parseInt(elem.salary);
     });
-    var theTemplateScript = $('#salary-total').html();
-    var theTemplate = Handlebars.compile(theTemplateScript);
-    return theTemplate(total);
+    $('header').html(salaryTemplate(total));
   }
 
   //function to remove employees
@@ -42,12 +43,8 @@ $(function() {
 
   //Takes in employee object, adds it to html table along with button and employee rating style
   function employeeRender(emp) {
-    var $tr = $('<tr>');
-    var $buttontd = $('<td>');
-    var $button = $('<button>');
-    $button.text('Remove Employee');  //prepares remove button to be added
-    $buttontd.append($button);
-    for (var prop in emp) {
+
+    /*for (var prop in emp) {
       var $td = $('<td>');      //cycles through employee properties, adding the property value to the table text
       if (prop == 'salary') {
         $td.text('$' + emp[prop]);
@@ -99,15 +96,24 @@ $(function() {
         }
       }
     }
-
+*/
   }
 
   //event handler for form submit, calls employeeRender to add information to table
   $('form').on('submit', function(event) {
     try {
       var data = $(this).serializeArray();
-      var newEmployee = new Employee(data[0].value, data[1].value, data[2].value, data[3].value, data[4].value, data[5].value);
-      employeeRender(newEmployee);
+      employees.push(new Employee(data[0].value, data[1].value, data[2].value, data[3].value, data[4].value, data[5].value));
+      employees.sort(function(a, b) {
+        if(a.firstName.toUpperCase() > b.firstName.toUpperCase()) {
+          return 1;
+        } else if (a.firstName.toUpperCase() < b.firstName.toUpperCase()) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
+
       updateSalaryTotal();
     } catch (e) {
       console.log(e);
@@ -121,6 +127,7 @@ $(function() {
   //event handler for removal of employees
   $('table').on('click', 'button', removeEmployee);
 
+  $('.employees').append(listTemplate({list: employees}));
   //event handler for random employee generator, uses chance.js library for randomization
   $('aside').on('click', 'button', function(event) {
     var randEmployee = new Employee(chance.first(), chance.last(), chance.natural({min: 1000, max: 9999999}), chance.word(), chance.natural({min: 1, max: 5}), 1000 * chance.natural({min: 1, max: 999}));

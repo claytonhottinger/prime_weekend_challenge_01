@@ -10,7 +10,6 @@
 
       <aside>
         <header>
-          <p>
             <script id="salary-total" type="text/x-handlebars-template">
               <p> Total Payroll: ${{salary}}</p>
             </script>
@@ -28,15 +27,20 @@
 
       </aside>
       <table class = "hidden">
-        <tr>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Employee Number</th>
-          <th>Title</th>
-          <th>Last Review Rating</th>
-          <th> Annual Salary</th>
-          <th></th>
-        </tr>
+        <script id="employeetable" type="text/x-handlebars-template">
+
+          {{#each employees}}
+            <tr>
+              <td>{{firstName}}</td>
+              <td>{{lastName}}</td>
+              <td>{{emplNumber}}</td>
+              <td>{{title}}</td>
+              <td>{{reviewRating}}</td>
+              <td>{{salary}}</td>
+              <td><button>Remove</button></td>
+            </tr>
+            {{/each}}
+        </script>
       </table>
     </section>
 
